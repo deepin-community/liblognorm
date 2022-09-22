@@ -1,0 +1,202 @@
+liblognorm (2.0.5-1.1) unstable; urgency=medium
+
+  * Non-maintainer upload.
+  * Build documentation with python3-sphinx; Closes: #943150
+
+ -- Sandro Tosi <morph@debian.org>  Sat, 14 Mar 2020 20:04:16 -0400
+
+liblognorm (2.0.5-1) unstable; urgency=medium
+
+  * New upstream version 2.0.5
+  * Remove wrong tag multi-arch: foreign (Closes: #884534)
+  * Update symbols file
+  * Change priority from extra to optional
+
+ -- Pierre Chifflier <pollux@debian.org>  Sun, 29 Apr 2018 11:52:22 +0200
+
+liblognorm (2.0.3-1) unstable; urgency=medium
+
+  * New upstream version 2.0.3 (Closes: #845735)
+  * Removed quilt patches, applied upstream
+  * Update symbols file
+
+ -- Pierre Chifflier <pollux@debian.org>  Fri, 02 Jun 2017 09:38:08 +0200
+
+liblognorm (2.0.1-1.1) unstable; urgency=medium
+
+  * Non-maintainer upload.
+  * Fix infinite loop in lognormalizer's read_line() function due to incorrect
+    use of fgetc(). (Closes: #834121)
+  * Fix misleading indentation warnings with GCC6.
+  * Fix dependencies of liblognorm-dev which requires libfastjson-dev instead
+    of libjson-c-dev. (Closes: #834081)
+
+ -- Michael Biebl <biebl@debian.org>  Wed, 05 Oct 2016 00:36:31 +0200
+
+liblognorm (2.0.1-1) unstable; urgency=medium
+
+  [ Pierre Chifflier ]
+  * Imported Upstream version 2.0.1 (Closes: #833628)
+  * Build against libfastjson
+  * Bump Standards version to 3.9.8
+  * Drop debian/patches/01-fix-pkgconfig.patch, fixed upstream.
+  * Update copyright file and convert it to DEP-5 format
+
+  [ Michael Biebl ]
+  * Split lognormalizer utility into a separate binary package named
+    liblognorm-utils
+    (Closes: #753510)
+  * Drop debian/liblognorm-dev.dirs and debian/liblognorm2.dirs.
+    They are not needed and only create unused, empty directories.
+    (Closes: #830831)
+  * Update for soname bump: liblognorm2 → liblognorm5
+  * Update symbols file for liblognorm5
+  * Update package description (Closes: #808547)
+
+ -- Pierre Chifflier <pollux@debian.org>  Tue, 09 Aug 2016 09:41:20 +0200
+
+liblognorm (1.1.2-1) unstable; urgency=medium
+
+  * Imported Upstream version 1.1.2
+  * Update symbols
+  * Pre-Depends: ${misc:Pre-Depends} instead of multiarch-support
+
+ -- Pierre Chifflier <pollux@debian.org>  Sat, 26 Sep 2015 10:53:59 +0200
+
+liblognorm (1.1.1-1) unstable; urgency=medium
+
+  * Imported Upstream version 1.1.1
+  * Rename liblognorm1 to liblognorm2 to reflect soname change
+  * Update symbols file
+
+ -- Pierre Chifflier <pollux@debian.org>  Fri, 08 May 2015 14:05:59 +0200
+
+liblognorm (1.1.0-1) experimental; urgency=low
+
+  * Imported Upstream version 1.1.0
+  * Update symbols
+  * Bump standards version to 3.9.6
+
+ -- Pierre Chifflier <pollux@debian.org>  Mon, 09 Mar 2015 13:29:57 +0100
+
+liblognorm (1.0.1-3) unstable; urgency=medium
+
+  * Move lognormalizer exe to arch-specific directory, drop conflict against
+    liblognorm0, and make package Multi-arch:Same (Closes: #753510)
+
+ -- Pierre Chifflier <pollux@debian.org>  Wed, 20 Aug 2014 14:58:53 +0200
+
+liblognorm (1.0.1-1) unstable; urgency=medium
+
+  * Upload to unstable
+  * Imported Upstream version 1.0.1
+  * Run autoreconf during build (Closes: #737342)
+  * Build and install Sphinx documentation
+  * Remove dependency on libee-dev, replaced by libjson-c-dev (Closes: #748466)
+  * Fix pkg-config file (Closes: #748467)
+
+ -- Pierre Chifflier <pollux@debian.org>  Sun, 29 Jun 2014 12:52:16 +0200
+
+liblognorm (1.0.0-2) experimental; urgency=low
+
+  * Add missing conflicts/replaces on liblognorm0
+
+ -- Pierre Chifflier <pollux@debian.org>  Mon, 30 Dec 2013 09:30:35 +0100
+
+liblognorm (1.0.0-1) experimental; urgency=low
+
+  * Upload to experimental
+  * Imported Upstream version 1.0.0
+  * Add build-dep on libjson-c-dev
+  * Bump Standards Version to 3.9.5
+  * Rename liblognorm0 to liblognorm1 to reflect soname change
+  * Update symbols file
+
+ -- Pierre Chifflier <pollux@debian.org>  Sat, 28 Dec 2013 18:21:13 +0100
+
+liblognorm (0.3.7-1) unstable; urgency=low
+
+  * Imported Upstream version 0.3.7
+  * Update symbols file
+  * Bump Standards Version to 3.9.4
+
+ -- Pierre Chifflier <pollux@debian.org>  Tue, 20 Aug 2013 17:21:03 +0200
+
+liblognorm (0.3.6-2) unstable; urgency=low
+
+  * Upload to unstable
+
+ -- Pierre Chifflier <pollux@debian.org>  Thu, 09 May 2013 21:45:39 +0200
+
+liblognorm (0.3.6-1) experimental; urgency=low
+
+  * Upload to experimental
+  * Imported Upstream version 0.3.6
+
+ -- Pierre Chifflier <pollux@debian.org>  Fri, 22 Mar 2013 11:34:36 +0100
+
+liblognorm (0.3.5-1) unstable; urgency=low
+
+  * Imported Upstream version 0.3.5
+
+ -- Pierre Chifflier <pollux@debian.org>  Sat, 10 Nov 2012 16:39:29 +0100
+
+liblognorm (0.3.4-1) unstable; urgency=low
+
+  * Imported Upstream version 0.3.4
+
+ -- Pierre Chifflier <pollux@debian.org>  Mon, 16 Apr 2012 22:26:37 +0200
+
+liblognorm (0.3.3-1) unstable; urgency=low
+
+  * Imported Upstream version 0.3.3
+  * Bump DH version to 9
+    - drop build-dep on hardening-wrapper, replace by dpkg-buildflags
+    - enable multiarch support
+  * Bump Standards Version to 3.9.3
+
+ -- Pierre Chifflier <pollux@debian.org>  Sat, 25 Feb 2012 15:11:24 +0100
+
+liblognorm (0.3.2-1) unstable; urgency=low
+
+  * Imported Upstream version 0.3.2
+  * Convert to DH version 8
+  * Update symbols file
+
+ -- Pierre Chifflier <pollux@debian.org>  Mon, 05 Dec 2011 21:24:01 +0100
+
+liblognorm (0.3.0-2) unstable; urgency=low
+
+  * Acknowledge NMU, thanks Luk (Closes: #631466)
+  * Enable hardening wrapper
+  * Bump Standards Version to 3.9.2
+
+ -- Pierre Chifflier <pollux@debian.org>  Tue, 12 Jul 2011 08:31:32 +0200
+
+liblognorm (0.3.0-1.1) unstable; urgency=low
+
+  * Non-maintainer upload.
+  * Version build dependency on libee-dev (Closes: #621714).
+  * Don't ship .la files (Closes: #621685).
+
+ -- Luk Claes <luk@debian.org>  Fri, 24 Jun 2011 08:10:00 +0200
+
+liblognorm (0.3.0-1) unstable; urgency=low
+
+  * Imported Upstream version 0.3.0
+  * Add watch file
+  * Add symbols file
+
+ -- Pierre Chifflier <pollux@debian.org>  Thu, 07 Apr 2011 10:29:22 +0200
+
+liblognorm (0.1.0-2) unstable; urgency=low
+
+  * Add pkg-config and libxml2-dev to build-deps
+
+ -- Pierre Chifflier <pollux@debian.org>  Sun, 13 Feb 2011 22:00:41 +0100
+
+liblognorm (0.1.0-1) unstable; urgency=low
+
+  * Initial release (Closes: #606750)
+
+ -- Pierre Chifflier <pollux@debian.org>  Sat, 11 Dec 2010 11:53:53 +0100

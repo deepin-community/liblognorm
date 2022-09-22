@@ -1,0 +1,55 @@
+Source: liblognorm
+Priority: optional
+Maintainer: Pierre Chifflier <pollux@debian.org>
+Build-Depends: debhelper (>= 9),
+    dh-autoreconf,
+    autotools-dev,
+    pkg-config,
+    libxml2-dev,
+    libestr-dev,
+    libfastjson-dev,
+    python3-sphinx
+Standards-Version: 3.9.8
+Section: libs
+Homepage: http://www.liblognorm.com/
+#Vcs-Git: git://git.debian.org/collab-maint/liblognorm.git
+#Vcs-Browser: http://git.debian.org/?p=collab-maint/liblognorm.git;a=summary
+
+Package: liblognorm-dev
+Section: libdevel
+Architecture: any
+Depends: liblognorm5 (= ${binary:Version}),
+    ${misc:Depends},
+    ${sphinxdoc:Depends},
+    libfastjson-dev,
+    libestr-dev
+Description: log normalizing library - development files
+ Liblognorm is an event and log normalization library that is capable of
+ real-time processing. It provides the capability to normalize events to
+ a set of standard formats.
+ .
+ This package contains the development files.
+
+Package: liblognorm5
+Section: libs
+Architecture: any
+Depends: ${shlibs:Depends}, ${misc:Depends}
+Pre-Depends: ${misc:Pre-Depends}
+Multi-Arch: same
+Description: log normalizing library
+ Liblognorm is an event and log normalization library that is capable of
+ real-time processing. It provides the capability to normalize events to
+ a set of standard formats.
+ .
+ This package contains the shared library.
+
+Package: liblognorm-utils
+Section: admin
+Architecture: any
+Depends: ${shlibs:Depends}, ${misc:Depends}
+Description: log normalizing utilities
+ Liblognorm is an event and log normalization library that is capable of
+ real-time processing. It provides the capability to normalize events to
+ a set of standard formats.
+ .
+ This package contains the lognormalizer tool.
