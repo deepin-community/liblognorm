@@ -1,0 +1,31 @@
+#!/bin/bash
+
+set -e
+
+WORKDIR="$(mktemp -d)"
+trap "rm -rf $WORKDIR" 0 INT QUIT ABRT PIPE TERM
+#cd "$WORKDIR"
+
+# [INPUT]=OUTPUT
+declare -A tests=(
+    ['Weight: 42kg']='{ "unit": "kg", "N": "42", "fat": "free" }'
+    ['first field,second field,third field,fourth field']='{ "r4": "fourth field", "r3": "third field", "r2": "second field", "r1": "first field" }'
+    ['CSV: field1,,field3']='{ "f3": "field3", "f2": "", "f1": "field1" }'
+    ['Snow White and the Seven Dwarfs']='{ "company": "the Seven Dwarfs" }'
+    ['iptables: SRC=192.168.1.134 DST=46.252.161.13 LEN=48 TOS=0x00 PREC=0x00']='{ "SRC": "192.168.1.134", "DST": "46.252.161.13", "LEN": "48", "TOS": "0x00", "PREC": "0x00" }'
+    ['2012-10-11 src=127.0.0.1 dst=88.111.222.19']='{ "dst": "88.111.222.19", "src": "127.0.0.1", "date": "2012-10-11" }'
+    ['Oct 29 09:47:08 server rsyslogd: rsyslogd groupid changed to 103']='{ "text": "rsyslogd groupid changed to 103", "tag": "rsyslogd", "host": "server", "date1": "Oct 29 09:47:08" }'
+)
+
+for key in "${!tests[@]}"; do
+    OUTPUT="$(echo "$key" | lognormalizer -r rulebases/sample.rulebase)"
+    echo "-- input : '$key'"
+    echo "-- output: '$OUTPUT'"
+    if [ "$OUTPUT" != "${tests[$key]}" ]; then
+        echo "---- want: ${tests[$key]}"
+        exit 1
+    fi
+    echo
+done
+
+echo "execute: OK" 

@@ -467,7 +467,9 @@ PARSER_Construct(RFC5424Date)
 					fmtmode);
 			}
 		} else {
-			ln_errprintf(ctx, 0, "invalid param for date-rfc5424 %s", key);
+			if(!(strcmp(key, "name") == 0 && strcmp(json_object_get_string(val), "-") == 0)) {
+				ln_errprintf(ctx, 0, "invalid param for date-rfc5424 %s", key);
+			}
 		}
 		json_object_iter_next(&it);
 	}
@@ -753,7 +755,9 @@ PARSER_Construct(RFC3164Date)
 					fmtmode);
 			}
 		} else {
-			ln_errprintf(ctx, 0, "invalid param for date-rfc3164 %s", key);
+			if(!(strcmp(key, "name") == 0 && strcmp(json_object_get_string(val), "-") == 0)) {
+				ln_errprintf(ctx, 0, "invalid param for date-rfc3164 %s", key);
+			}
 		}
 		json_object_iter_next(&it);
 	}
@@ -854,7 +858,9 @@ PARSER_Construct(Number)
 					fmtmode);
 			}
 		} else {
-			ln_errprintf(ctx, 0, "invalid param for number: %s", key);
+			if(!(strcmp(key, "name") == 0 && strcmp(json_object_get_string(val), "-") == 0)) {
+				ln_errprintf(ctx, 0, "invalid param for number: %s", key);
+			}
 		}
 		json_object_iter_next(&it);
 	}
@@ -958,7 +964,9 @@ PARSER_Construct(Float)
 					fmtmode);
 			}
 		} else {
-			ln_errprintf(ctx, 0, "invalid param for float: %s", key);
+			if(!(strcmp(key, "name") == 0 && strcmp(json_object_get_string(val), "-") == 0)) {
+				ln_errprintf(ctx, 0, "invalid param for float: %s", key);
+			}
 		}
 		json_object_iter_next(&it);
 	}
@@ -1060,7 +1068,9 @@ PARSER_Construct(HexNumber)
 					fmtmode);
 			}
 		} else {
-			ln_errprintf(ctx, 0, "invalid param for hexnumber: %s", key);
+			if(!(strcmp(key, "name") == 0 && strcmp(json_object_get_string(val), "-") == 0)) {
+				ln_errprintf(ctx, 0, "invalid param for hexnumber: %s", key);
+			}
 		}
 		json_object_iter_next(&it);
 	}
@@ -1794,7 +1804,6 @@ PARSER_Parse(CiscoInterfaceSpec)
 	size_t lenPort;
 	if(ln_v2_parseNumber(npb, &i, NULL, &lenPort, NULL) != 0) goto done;
 	i += lenPort;
-	if(i == npb->strLen) goto success;
 
 	/* check if optional second ip/port is present
 	 * We assume we must at least have 5 chars [" (::1)"]
@@ -2890,6 +2899,9 @@ done:
 	return r;
 }
 
+struct data_CheckpointLEA {
+	char terminator; /* '\0' - do not use */
+};
 /**
  * Parser for Checkpoint LEA on-disk format.
  * added 2015-06-18 by rgerhards, v1.1.2
@@ -2901,6 +2913,7 @@ PARSER_Parse(CheckpointLEA)
 	int foundFields = 0;
 	char *name = NULL;
 	char *val = NULL;
+	struct data_CheckpointLEA *const data = (struct data_CheckpointLEA*) pdata;
 
 	while(i < npb->strLen) {
 		while(i < npb->strLen && npb->str[i] == ' ') /* skip leading SP */
@@ -2914,11 +2927,15 @@ PARSER_Parse(CheckpointLEA)
 		}
 		iName = i;
 		/* TODO: do a stricter check? ... but we don't have a spec */
+		if(i < npb->strLen && npb->str[i] == data->terminator) {
+			break;
+		}
 		while(i < npb->strLen && npb->str[i] != ':') {
 			++i;
 		}
-		if(i+1 >= npb->strLen || npb->str[i] != ':')
+		if(i+1 >= npb->strLen || npb->str[i] != ':') {
 			FAIL(LN_WRONGPARSER);
+		}
 		lenName = i - iName;
 		++i; /* skip ':' */
 
@@ -2962,6 +2979,40 @@ done:
 		value = NULL;
 	}
 	return r;
+}
+PARSER_Construct(CheckpointLEA)
+{
+	int r = 0;
+	struct data_CheckpointLEA *data = (struct data_CheckpointLEA*) calloc(1, sizeof(struct data_CheckpointLEA));
+
+	if(json == NULL)
+		goto done;
+
+	struct json_object_iterator it = json_object_iter_begin(json);
+	struct json_object_iterator itEnd = json_object_iter_end(json);
+	while (!json_object_iter_equal(&it, &itEnd)) {
+		const char *key = json_object_iter_peek_name(&it);
+		struct json_object *const val = json_object_iter_peek_value(&it);
+		if(!strcmp(key, "terminator")) {
+			const char *const optval = json_object_get_string(val);
+			if(strlen(optval) != 1) {
+				ln_errprintf(ctx, 0, "terminator must be exactly one character "
+					"but is: '%s'", optval);
+				r = LN_BADCONFIG;
+				goto done;
+			}
+			data->terminator = *optval;
+		}
+		json_object_iter_next(&it);
+	}
+
+done:
+	*pdata = data;
+	return r;
+}
+PARSER_Destruct(CheckpointLEA)
+{
+	free(pdata);
 }
 
 
@@ -3152,6 +3203,7 @@ struct data_String {
 		unsigned strip_quotes : 1;
 		unsigned esc_md : 2;
 	} flags;
+	enum { ST_MATCH_EXACT = 0, ST_MATCH_LAZY = 1} matching;
 	char qchar_begin;
 	char qchar_end;
 	char perm_chars[256]; // TODO: make this bit-wise, so we need  only 32 bytes
@@ -3308,9 +3360,11 @@ PARSER_Parse(String)
 	if(i == *offs)
 		goto done;
 
-	const size_t trmChkIdx = (bHaveQuotes) ? i+1 : i;
-	if(npb->str[trmChkIdx] != ' ' && trmChkIdx != npb->strLen)
-		goto done;
+	if((i - *offs < 1) || (data->matching == ST_MATCH_EXACT)) {
+		const size_t trmChkIdx = (bHaveQuotes) ? i+1 : i;
+		if(npb->str[trmChkIdx] != ' ' && trmChkIdx != npb->strLen)
+			goto done;
+	}
 
 	/* success, persist */
 	*parsed = i - *offs;
@@ -3365,6 +3419,7 @@ PARSER_Construct(String)
 	data->flags.esc_md = ST_ESC_BOTH;
 	data->qchar_begin = '"';
 	data->qchar_end = '"';
+	data->matching = ST_MATCH_EXACT;
 	memset(data->perm_chars, 0xff, sizeof(data->perm_chars));
 	
 	struct json_object_iterator it = json_object_iter_begin(json);
@@ -3430,6 +3485,18 @@ PARSER_Construct(String)
 				ln_errprintf(ctx, 0, "matching.permitted is invalid "
 					"object type, given as '%s",
 					 json_object_to_json_string(val));
+			}
+		} else if(!strcasecmp(key, "matching.mode")) {
+			const char *const optval = json_object_get_string(val);
+			if(!strcasecmp(optval, "strict")) {
+				data->matching = ST_MATCH_EXACT;
+			} else if(!strcasecmp(optval, "lazy")) {
+				data->matching = ST_MATCH_LAZY;
+			} else {
+				ln_errprintf(ctx, 0, "invalid matching.mode for string "
+					"parser: %s", optval);
+				r = LN_BADCONFIG;
+				goto done;
 			}
 		} else {
 			ln_errprintf(ctx, 0, "invalid param for hexnumber: %s",

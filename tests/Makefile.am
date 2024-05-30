@@ -33,6 +33,7 @@ TESTS_SHELLSCRIPTS = \
 	usrdef_ipaddr_dotdot.sh \
 	usrdef_ipaddr_dotdot2.sh \
 	usrdef_ipaddr_dotdot3.sh \
+	usrdef_nested_segfault.sh \
 	missing_line_ending.sh \
 	lognormalizer-invld-call.sh \
 	string_rb_simple.sh \
@@ -64,6 +65,8 @@ TESTS_SHELLSCRIPTS = \
 	strict_prefix_matching_2.sh \
 	field_string.sh \
 	field_string_perm_chars.sh \
+	field_string_lazy_matching.sh \
+	field_string_doc_sample_lazy.sh \
 	field_number.sh \
 	field_number-fmt_number.sh \
 	field_number_maxval.sh \
@@ -96,6 +99,7 @@ TESTS_SHELLSCRIPTS = \
 	field_cef_jsoncnf.sh \
 	field_checkpoint-lea.sh \
 	field_checkpoint-lea_jsoncnf.sh \
+	field_checkpoint-lea-terminator.sh \
 	field_duration.sh \
 	field_duration_jsoncnf.sh \
 	field_float.sh \
@@ -136,6 +140,7 @@ TESTS_SHELLSCRIPTS += \
 	field_suffixed.sh \
 	field_suffixed_with_invalid_ruledef.sh \
 	field_cisco-interface-spec.sh \
+	field_cisco-interface-spec-at-EOL.sh \
 	field_float_with_invalid_ruledef.sh \
 	very_long_logline.sh
 

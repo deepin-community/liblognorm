@@ -1,0 +1,53 @@
+#!/bin/sh
+# autopkgtest check: Build and run a program against liblognorm, to verify that
+# the headers are correctly installed
+
+set -e
+
+if [ -n "${DEB_HOST_GNU_TYPE:-}" ]; then
+    CROSS_COMPILE=${DEB_HOST_GNU_TYPE}-
+else
+    CROSS_COMPILE=
+fi
+
+WORKDIR="$(mktemp -d)"
+trap "rm -rf $WORKDIR" 0 INT QUIT ABRT PIPE TERM
+cd "$WORKDIR"
+cat <<.EOF > lognorm_test.c
+#include <liblognorm.h>
+#include <string.h>
+
+int main(void)
+{
+    printf("liblognorm version: %s\n", ln_version());
+
+    ln_ctx ctx = ln_initCtx();
+    if (ctx == NULL) {
+        printf("ln_initCtx failed\n");
+        return 1;
+    }
+
+    const char rule[] = "rule=syslog:%date1:date-rfc3164% %host:word% %tag:char-to:\x3a%: %text:rest%"; // from sample.rulebase
+    int load = ln_loadSamplesFromString(ctx, rule); 
+    if (load != 0) {
+        printf("ln_loadSamplesFromString failed\n");
+        return 1;
+    }
+
+    const char message[] = "Oct 29 09:47:08 server rsyslogd: rsyslogd's groupid changed to 103"; // from sample.rulebase
+    struct json_object *json = NULL;
+    int norm = ln_normalize(ctx, message, strlen(message), &json); 
+    if (norm != 0 || json == NULL) {
+        printf("ln_normalize failed\n");
+        return 1;
+    }
+
+    return 0;
+}
+.EOF
+
+${CROSS_COMPILE}gcc -pedantic -Wall -Werror -o lognorm_test lognorm_test.c $(pkg-config --cflags --libs lognorm)
+echo "build: OK"
+[ -x lognorm_test ]
+./lognorm_test
+echo "run: OK" 

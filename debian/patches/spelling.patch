@@ -1,0 +1,991 @@
+Description: Misc spelling fixes
+Author: Florian Ernst <florian@debian.org>
+Origin: vendor
+Last-Update: 2022-06-04
+Forwarded: https://github.com/rsyslog/liblognorm/pull/359/files
+
+Index: liblognorm-2.0.6/src/samp.c
+===================================================================
+--- liblognorm-2.0.6.orig/src/samp.c
++++ liblognorm-2.0.6/src/samp.c
+@@ -996,7 +996,7 @@ done:
+  * @param[in/out] ptr to ptr of input buffer; this is used if a string is
+  *                provided instead of a file. If so, this pointer is advanced
+  *                as data is consumed.
+- * @param[out] isEof must be set to 0 on entry and is switched to 1 if EOF occured.
++ * @param[out] isEof must be set to 0 on entry and is switched to 1 if EOF occurred.
+  * @return standard error code
+  */
+ static int
+@@ -1123,7 +1123,7 @@ done:
+ 	return repo;
+ }
+ 
+-/* @return 0 if all is ok, 1 if an error occured */
++/* @return 0 if all is ok, 1 if an error occurred */
+ int
+ ln_sampLoad(ln_ctx ctx, const char *file)
+ {
+@@ -1138,7 +1138,7 @@ ln_sampLoad(ln_ctx ctx, const char *file
+ 	const int version = checkVersion(repo);
+ 	ln_dbgprintf(ctx, "rulebase version is %d\n", version);
+ 	if(version == -1) {
+-		ln_errprintf(ctx, errno, "error determing version of %s", file);
++		ln_errprintf(ctx, errno, "error determining version of %s", file);
+ 		goto done;
+ 	}
+ 	if(ctx->version != 0 && version != ctx->version) {
+@@ -1167,7 +1167,7 @@ done:
+ 	return r;
+ }
+ 
+-/* @return 0 if all is ok, 1 if an error occured */
++/* @return 0 if all is ok, 1 if an error occurred */
+ int
+ ln_sampLoadFromString(ln_ctx ctx, const char *string)
+ {
+Index: liblognorm-2.0.6/src/v1_parser.c
+===================================================================
+--- liblognorm-2.0.6.orig/src/v1_parser.c
++++ liblognorm-2.0.6/src/v1_parser.c
+@@ -582,7 +582,7 @@ done:
+ /**
+  * Parse a hex Number.
+  * A hex number begins with 0x and contains only hex digits until the terminating
+- * whitespace. Note that if a non-hex character is deteced inside the number string,
++ * whitespace. Note that if a non-hex character is detected inside the number string,
+  * this is NOT considered to be a number.
+  */
+ PARSER(HexNumber)
+@@ -670,8 +670,8 @@ done:
+  * Parse whitespace.
+  * This parses all whitespace until the first non-whitespace character
+  * is found. This is primarily a tool to skip to the next "word" if
+- * the exact number of whitspace characters (and type of whitespace)
+- * is not known. The current parsing position MUST be on a whitspace,
++ * the exact number of whitespace characters (and type of whitespace)
++ * is not known. The current parsing position MUST be on a whitespace,
+  * else the parser does not match.
+  * This parser is also a forward-compatibility tool for the upcoming
+  * slsa (simple log structure analyser) tool.
+@@ -1718,7 +1718,7 @@ done:
+ 		else if (suffixes_str == NULL)
+ 			ln_dbgprintf(ctx, "couldn't allocate memory for suffix-list for field: '%s'", name);
+ 		else if (pData->nsuffix == 0)
+-			ln_dbgprintf(ctx, "could't read suffix-value(s) for field: '%s'", name);
++			ln_dbgprintf(ctx, "couldn't read suffix-value(s) for field: '%s'", name);
+ 		else if (pData->suffix_offsets == NULL)
+ 			ln_dbgprintf(ctx, "couldn't allocate memory for suffix-list element references for field: "
+ 				"'%s'", name);
+@@ -2878,7 +2878,7 @@ done:
+  * of end of name.
+  * Note: ArcSight violates the CEF spec ifself: they generate
+  * leading underscores in their extension names, which are
+- * definetly not alphanumeric. We still accept them...
++ * definitely not alphanumeric. We still accept them...
+  * They also seem to use dots.
+  */
+ static int
+@@ -3040,7 +3040,7 @@ PARSER(CEF)
+ 	char *name = NULL;
+ 	char *severity = NULL;
+ 
+-	/* minumum header: "CEF:0|x|x|x|x|x|x|" -->  17 chars */
++	/* minimum header: "CEF:0|x|x|x|x|x|x|" -->  17 chars */
+ 	if(strLen < i + 17 ||
+ 	   str[i]   != 'C' ||
+ 	   str[i+1] != 'E' ||
+@@ -3065,7 +3065,7 @@ PARSER(CEF)
+ 	 * This time, we do NOT pre-process the extension, but rather
+ 	 * persist them directly to JSON. This is contrary to other
+ 	 * parsers, but as the CEF header is pretty unique, this time
+-	 * it is exteremely unlike we will get a no-match during
++	 * it is extremely unlikely we will get a no-match during
+ 	 * extension processing. Even if so, nothing bad happens, as
+ 	 * the extracted data is discarded. But the regular case saves
+ 	 * us processing time and complexity. The only time when we
+Index: liblognorm-2.0.6/src/lognormalizer.c
+===================================================================
+--- liblognorm-2.0.6.orig/src/lognormalizer.c
++++ liblognorm-2.0.6/src/lognormalizer.c
+@@ -325,8 +325,8 @@ fprintf(stderr,
+ 	"    -oaddRuleLocation Add location of matching rule to metadata\n"
+ 	"    -oaddExecPath Add exec_path attribute to output\n"
+ 	"    -oaddOriginalMsg Always add original message to output, not just in error case\n"
+-	"    -p           Print back only if the message has been parsed succesfully\n"
+-	"    -P           Print back only if the message has NOT been parsed succesfully\n"
++	"    -p           Print back only if the message has been parsed successfully\n"
++	"    -P           Print back only if the message has NOT been parsed successfully\n"
+ 	"    -L           Add source file line number information to unparsed line output\n"
+ 	"    -t<tag>      Print back only messages matching the tag\n"
+ 	"    -v           Print debug. When used 3 times, prints parse DAG\n"
+Index: liblognorm-2.0.6/doc/configuration.rst
+===================================================================
+--- liblognorm-2.0.6.orig/doc/configuration.rst
++++ liblognorm-2.0.6/doc/configuration.rst
+@@ -32,11 +32,11 @@ Rulebase Versions
+ This documentation is for liblognorm version 2 and above. Version 2 is a
+ complete rewrite of liblognorm which offers many enhanced features but
+ is incompatible to some pre-v2 rulebase commands. For details, see
+-compatiblity document.
++compatibility document.
+ 
+ Note that liblognorm v2 contains a full copy of the v1 engine. As such
+ it is fully compatible to old rulebases. In order to use the new v2
+-engine, you need to explicitely opt in. To do so, you need to add
++engine, you need to explicitly opt in. To do so, you need to add
+ the line::
+ 
+     version=2
+@@ -46,7 +46,7 @@ to the top of your rulebase file. Curren
+  * the line is given exactly as above
+  * no whitespace within the sequence is permitted (e.g. "version = 2"
+    is invalid)
+- * no whitepace or comment after the "2" is permitted
++ * no whitespace or comment after the "2" is permitted
+    (e.g. "version=2 # comment") is invalid
+  * this line **must** be the **very** first line of the file; this
+    also means there **must** not be any comment or empty lines in
+@@ -247,7 +247,7 @@ Some special field names exist:
+   it does so by creating a json subtree. If the field is named ".", then
+   no subtree is created but instead the subfields are moved into the main
+   hierarchy.
+-* **two dots** (".."): similiar to ".", but can be used at the lower level to denote
++* **two dots** (".."): similar to ".", but can be used at the lower level to denote
+   that a field is to be included with the name given by the upper-level
+   object. Note that ".." is only acted on if a subelement contains a single
+   field. The reason is that if there were more, we could not assign all of
+@@ -275,7 +275,7 @@ stems back to the legacy v1 system)::
+ 	%tag:char-to{"extradata":":"}%
+ 
+ Whitespace, including LF, is permitted inside a field definition after
+-the opening precent sign and before the closing one. This can be used to
++the opening percent sign and before the closing one. This can be used to
+ make complex rules more readable. So the example rule from the overview
+ section above could be rewritten as::
+ 
+@@ -335,7 +335,7 @@ A couple of things to note:
+ 
+  * we express everything in this example in a *single* parser definition
+  * this is done by using a **JSON array**; whenever an array is used,
+-   multiple parsers can be specified. They are exectued one after the
++   multiple parsers can be specified. They are executed one after the
+    other in given order.
+  * literal text is matched here via explicit parser call; as specified
+    below, this is recommended only for specific use cases with the
+@@ -344,7 +344,7 @@ A couple of things to note:
+    on the main JSON level
+  * the literal text shall not be stored inside an output variable; for
+    this reason no name attribute is given (we could also have used
+-   ``"name":"-"`` which achives the same effect but is more verbose).
++   ``"name":"-"`` which achieves the same effect but is more verbose).
+ 
+ With the literal parser calls replaced by actual literals, the sample
+ looks like this::
+@@ -373,7 +373,7 @@ Some guidelines:
+  * if a field needs to be matched but the result of that match is not
+    needed, omit the "name" attribute; specifically avoid using
+    the more verbose ``"name":"-"``.
+- * it is a good idea to start each defintion with ``"type":"..."``
++ * it is a good idea to start each definition with ``"type":"..."``
+    as this provides a good quick overview over what is being defined.
+  
+ Mandatory Parameters
+@@ -404,7 +404,7 @@ and always matches the rest of the messa
+ 
+ Note that liblognorm internally
+ has a parser-specific priority, which is selected by the program developer based
+-on the specificallity of a type. If the user assigns equal priorities, parsers are
++on the specificality of a type. If the user assigns equal priorities, parsers are
+ executed based on the parser-specific priority.
+ 
+ The default priority value is 30,000.
+@@ -420,11 +420,11 @@ generic parsers, which are then tailored
+ There is nothing bad about using legacy parsers and there is no
+ plan to outphase them at any time in the future. We just wanted to
+ let you know, especially if you wonder about some "wereid" parsers.
+-In v1, parsers could have only a single paramter, which was called
++In v1, parsers could have only a single parameter, which was called
+ "extradata" at that time. This is why some of the legacy parsers
+ require or support a parameter named "extradata" and do not use a
+ better name for it (internally, the legacy format creates a
+-v2 parser defintion with "extradata" being populated from the
++v2 parser definition with "extradata" being populated from the
+ legacy "extradata" part of the configuration).
+ 
+ number
+@@ -522,11 +522,11 @@ function to check for space, horizontal
+ feed and carriage return characters.
+ 
+ This parser is primarily a tool to skip to the next "word" if
+-the exact number of whitspace characters (and type of whitespace)
+-is not known. The current parsing position MUST be on a whitspace,
++the exact number of whitespace characters (and type of whitespace)
++is not known. The current parsing position MUST be on a whitespace,
+ else the parser does not match.
+ 
+-Remeber that to just parse but not preserve the field contents, the
++Remember that to just parse but not preserve the field contents, the
+ dash ("-") is used as field name in compact format or the "name" 
+ parameter is simply omitted in JSON format. This is almost always
+ expected with the *whitespace* type.
+@@ -698,7 +698,7 @@ One or more characters, up to the next s
+ alpha
+ #####   
+ 
+-One or more alphabetic characters, up to the next whitspace, punctuation,
++One or more alphabetic characters, up to the next whitespace, punctuation,
+ decimal digit or control character.
+ 
+ char-to
+@@ -734,14 +734,14 @@ which terminates the match.
+ rest
+ ####
+ 
+-Zero or more characters untill end of line. Must always be at end of the 
++Zero or more characters until end of line. Must always be at end of the
+ rule, even though this condition is currently **not** checked. In any case,
+ any definitions after *rest* are ignored.
+ 
+ Note that the *rest* syntax should be avoided because it generates
+ a very broad match. If it needs to be used, the user shall assign it
+ the lowest priority among his parser definitions. Note that the
+-parser-sepcific priority is also lowest, so by default it will only
++parser-specific priority is also lowest, so by default it will only
+ match if nothing else matches.
+ 
+ quoted-string
+@@ -804,7 +804,7 @@ Specifies the format of the json object.
+ - **timestamp-unix-ms** - a kind of unix-timestamp, but with millisecond resolution.
+   This format is understood for example by ElasticSearch. Note that RFC3164 does **not**
+   contain subsecond resolution, so this option makes no sense for RFC3164-data only.
+-  It is usefull, howerver, if processing mixed sources, some of which contain higher
++  It is useful, however, if processing mixed sources, some of which contain higher
+   precision.
+ 
+ 
+@@ -973,7 +973,7 @@ Samples for such a spec are:
+  * inside:192.168.1.25/53 (192.168.1.25/53) (some.user)
+  * 192.168.1.15/0(LOCAL\RG-867G8-DEL88D879BBFFC8)
+ 
+-Note that the current verision of liblognorm does not permit sole
++Note that the current version of liblognorm does not permit sole
+ IP addresses to be detected as a Cisco interface spec. However, we
+ are reviewing more Cisco message and need to decide if this is
+ to be supported. The problem here is that this would create a much
+@@ -983,7 +983,7 @@ broader parser which would potentially m
+ As this object extracts multiple subelements, it create a JSON
+ structure. 
+ 
+-Let's for example look at this definiton (compact format)::
++Let's for example look at this definition (compact format)::
+ 
+     %ifaddr:cisco-interface-spec%
+ 
+@@ -1077,7 +1077,7 @@ This rule matches messages like these::
+ 
+ Note that the "parser" parameter here needs to be provided with an array
+ of *alternatives*. In this case, the JSON array is **not** interpreted as
+-a sequence. Note, though that you can nest defintions by using custom types.
++a sequence. Note, though that you can nest definitions by using custom types.
+  
+ repeat
+ ######
+@@ -1141,7 +1141,7 @@ the "parser" parameter **must** match at
+ fails.
+ 
+ In the above sample, "while" mismatches after "4", because no ", " follows.
+-Then, the parser termiantes, and according to definition the literal " b"
++Then, the parser terminates, and according to definition the literal " b"
+ is matched, which will result in a successful rule match (note: the "a ",
+ " b" literals are just here for explanatory purposes and could be any
+ other rule element).
+@@ -1169,7 +1169,7 @@ Note the missing space after "4,". To ha
+                          }
+              }% b
+ 
+-This definition handles numbers being delemited by either ", " or ",".
++This definition handles numbers being delimited by either ", " or ",".
+ 
+ For people with programming skills, the "repeat" parser is described
+ by this pseudocode::
+Index: liblognorm-2.0.6/src/pdag.c
+===================================================================
+--- liblognorm-2.0.6.orig/src/pdag.c
++++ liblognorm-2.0.6/src/pdag.c
+@@ -48,7 +48,7 @@ int advstats_lit_parser_calls[ADVSTATS_M
+  * VERY IMPORTANT: the initialization must be done EXACTLY in the
+  * order of parser IDs (also see comment in pdag.h).
+  *
+- * Rough guideline for assigning priorites:
++ * Rough guideline for assigning priorities:
+  * 0 is highest, 255 lowest. 255 should be reserved for things that
+  * *really* should only be run as last resort --> rest. Also keep in
+  * mind that the user-assigned priority is put in the upper 24 bits, so
+@@ -191,7 +191,7 @@ ln_pdagClearVisited(ln_ctx ctx)
+ }
+ 
+ /**
+- * Process a parser defintion. Note that a single defintion can potentially
++ * Process a parser definition. Note that a single definition can potentially
+  * contain many parser instances.
+  * @return parser node ptr or NULL (on error)
+  */
+@@ -337,7 +337,7 @@ done:	return;
+ /**
+  * pdag optimizer step: literal path compaction
+  *
+- * We compress as much as possible and evalute the path down to
++ * We compress as much as possible and evaluate the path down to
+  * the first non-compressable element. Note that we must NOT
+  * compact those literals that are either terminal nodes OR
+  * contain names so that the literal is to be parsed out.
+@@ -431,12 +431,12 @@ deleteComponentID(struct ln_pdag *const
+  * This is required if the ALTERNATIVE parser type is used,
+  * which will create component IDs for each of it's invocations.
+  * As such, we do not only fix the string, but know that all
+- * children also need fixning. We do this be simply deleting
++ * children also need fixing. We do this be simply deleting
+  * all of their rb_ids, as we know they will be visited again.
+  * Note: if we introduce the same situation by new functionality,
+  * we may need to review this code here as well. Also note
+  * that the component ID will not be 100% correct after our fix,
+- * because that ID could acutally be created by two sets of rules.
++ * because that ID could actually be created by two sets of rules.
+  * But this is the best we can do.
+  */
+ static void
+@@ -460,7 +460,7 @@ done:	return;
+ }
+ /**
+  * Assign human-readable identifiers (names) to each node. These are
+- * later used in stats, debug output and whereever else this may make
++ * later used in stats, debug output and wherever else this may make
+  * sense.
+  */
+ static void
+@@ -735,7 +735,7 @@ ln_fullPdagStats(ln_ctx ctx, FILE *const
+ 		    "parser call statistic is the number of parsers called along\n"
+ 		    "the path. That number is higher, as multiple parsers may be\n"
+ 		    "called at each node. The number of literal parser calls is\n"
+-		    "given explicitely, as they use almost no time to process.\n"
++		    "given explicitly, as they use almost no time to process.\n"
+ 		    "\n"
+ 		);
+ 	total_len = 0;
+@@ -1086,7 +1086,7 @@ static inline void dotAddPtr(es_str_t **
+ 	i = snprintf(buf, sizeof(buf), "l%p", p);
+ 	es_addBuf(str, buf, i);
+ }
+-struct data_Literal { const char *lit; }; // TODO remove when this hack is no longe needed
++struct data_Literal { const char *lit; }; // TODO remove when this hack is no longer needed
+ /**
+  * recursive handler for DOT graph generator.
+  */
+@@ -1354,7 +1354,7 @@ fixJSON(struct ln_pdag *dag,
+ 		int isDotDot = 0;
+ 		struct json_object *valDotDot = NULL;
+ 		if(json_object_get_type(*value) == json_type_object) {
+-			/* TODO: this needs to be speeded up by just checking the first
++			/* TODO: this needs to be sped up by just checking the first
+ 			 * member and ensuring there is only one member. This requires
+ 			 * extensions to libfastjson.
+ 			 */
+@@ -1523,7 +1523,7 @@ add_rule_to_mockup(npb_t *const __restri
+  * @param[in] string string to be matched against (the to-be-normalized data)
+  * @param[in] strLen length of the to-be-matched string
+  * @param[in] offs start position in input data
+- * @param[out] pPrasedTo ptr to position up to which the the parsing succed in max
++ * @param[out] pPrasedTo ptr to position up to which the parsing succeed in max
+  * @param[in/out] json ... that is being created during normalization
+  * @param[out] endNode if a match was found, this is the matching node (undefined otherwise)
+  *
+Index: liblognorm-2.0.6/src/annot.h
+===================================================================
+--- liblognorm-2.0.6.orig/src/annot.h
++++ liblognorm-2.0.6/src/annot.h
+@@ -155,7 +155,7 @@ void ln_deleteAnnot(ln_annot *annot);
+  * 		    must NOT be re-used by caller
+  * @returns 0 on success, something else otherwise
+  */
+-int ln_addAnnotOp(ln_annot *anot, ln_annot_opcode opc, es_str_t *name, es_str_t *value);
++int ln_addAnnotOp(ln_annot *annot, ln_annot_opcode opc, es_str_t *name, es_str_t *value);
+ 
+ 
+ /**
+@@ -164,7 +164,7 @@ int ln_addAnnotOp(ln_annot *anot, ln_ann
+  * @memberof ln_annot
+  *
+  * @param[in] ctx current context
+- * @param[in] event event to annotate (updated with anotations on exit)
++ * @param[in] event event to annotate (updated with annotations on exit)
+  * @returns 0 on success, something else otherwise
+  */
+ int ln_annotate(ln_ctx ctx, struct json_object *json, struct json_object *tags);
+Index: liblognorm-2.0.6/src/liblognorm.h
+===================================================================
+--- liblognorm-2.0.6.orig/src/liblognorm.h
++++ liblognorm-2.0.6/src/liblognorm.h
+@@ -108,7 +108,7 @@ int ln_hasAdvancedStats(void);
+  * To prevent memory leaks, ln_exitCtx() must be called on a library
+  * context that is no longer needed.
+  *
+- * @return new library context or NULL if an error occured
++ * @return new library context or NULL if an error occurred
+  */
+ ln_ctx ln_initCtx(void);
+ 
+@@ -116,19 +116,19 @@ ln_ctx ln_initCtx(void);
+  * Inherit control attributes from a library context.
+  *
+  * This does not copy the parse-tree, but does copy
+- * behaviour-controling attributes such as enableRegex.
++ * behaviour-controlling attributes such as enableRegex.
+  *
+  * Just as with ln_initCtx, ln_exitCtx() must be called on a library
+  * context that is no longer needed.
+  *
+- * @return new library context or NULL if an error occured
++ * @return new library context or NULL if an error occurred
+  */
+ ln_ctx ln_inherittedCtx(ln_ctx parent);
+ 
+ /**
+  * Discard a library context.
+  *
+- * Free's the ressources associated with the given library context. It
++ * Free's the resources associated with the given library context. It
+  * MUST NOT be accessed after calling this function.
+  *
+  * @param ctx The context to be discarded.
+@@ -162,7 +162,7 @@ ln_setCtxOpts(ln_ctx ctx, unsigned opts)
+  * - it's internal processing
+  * - the way a log message is being normalized
+  *
+- * It does so by emiting "interesting" information about its processing
++ * It does so by emitting "interesting" information about its processing
+  * at various stages. A caller can obtain this information by registering
+  * an entry point. When done so, liblognorm will call the entry point
+  * whenever it has something to emit. Note that debugging can be rather
+@@ -183,7 +183,7 @@ ln_setCtxOpts(ln_ctx ctx, unsigned opts)
+  * @param[in] cookie Opaque cookie to be passed down to debug handler. Can be
+  *                   used for some state tracking by the caller. This is defined as
+  *                   void* to support pointers. To play it safe, a pointer should be
+- *                   passed (but advantorous folks may also use an unsigned).
++ *                   passed (but adventurous folks may also use an unsigned).
+  *
+  * @return Returns zero on success, something else otherwise.
+  */
+@@ -257,7 +257,7 @@ int ln_loadSamplesFromString(ln_ctx ctx,
+  * @param[in] ctx The library context to use.
+  * @param[in] str The message string (see note above).
+  * @param[in] strLen The length of the message in bytes.
+- * @param[out] json_p A new event record or NULL if an error occured. <b>Must be
++ * @param[out] json_p A new event record or NULL if an error occurred. <b>Must be
+  *                   destructed if no longer needed.</b>
+  *
+  * @return Returns zero on success, something else otherwise.
+Index: liblognorm-2.0.6/src/v1_ptree.h
+===================================================================
+--- liblognorm-2.0.6.orig/src/v1_ptree.h
++++ liblognorm-2.0.6/src/v1_ptree.h
+@@ -42,7 +42,7 @@ typedef struct ln_fieldList_s ln_fieldLi
+ /**
+  * List of supported fields inside parse tree.
+  * This list holds all fields and their description. While normalizing,
+- * fields are tried in the order of this list. So the enqeue order
++ * fields are tried in the order of this list. So the enqueue order
+  * dictates precedence during parsing.
+  *
+  * value list. This is a single-linked list. In a later stage, we should
+@@ -54,7 +54,7 @@ typedef struct ln_fieldList_s ln_fieldLi
+ struct ln_fieldList_s {
+ 	es_str_t *name;		/**< field name */
+ 	es_str_t *data;		/**< extra data to be passed to parser */
+-	es_str_t *raw_data;	/**< extra untouched (unescaping is not done) data availble to be used by parser */
++	es_str_t *raw_data;	/**< extra untouched (unescaping is not done) data available to be used by parser */
+ 	void *parser_data; /** opaque data that the field-parser understands */
+ 	void (*parser_data_destructor)(void **); /** destroy opaque data that field-parser understands */
+ 	int (*parser)(const char*, size_t, size_t*, const ln_fieldList_t *,
+@@ -77,7 +77,7 @@ struct ln_ptree {
+ 		unsigned isTerminal:1;	/**< designates this node a terminal sequence? */
+ 	} flags;
+ 	struct json_object *tags;	/* tags to assign to events of this type */
+-	/* the respresentation below requires a lof of memory but is
++	/* the representation below requires a lof of memory but is
+ 	 * very fast. As an alternate approach, we can use a hash table
+ 	 * where we ignore control characters. That should work quite well.
+ 	 * But we do not do this in the initial step.
+Index: liblognorm-2.0.6/tests/field_descent.sh
+===================================================================
+--- liblognorm-2.0.6.orig/tests/field_descent.sh
++++ liblognorm-2.0.6/tests/field_descent.sh
+@@ -27,7 +27,7 @@ assert_output_json_eq '{"device": "gw-1"
+ execute 'blocked on gw-1 10.20.30.40/16 at 2014-12-08T08:53:33.05+05:30'
+ assert_output_json_eq '{"device": "gw-1", "net": {"subnet_addr": "10.20.30.40", "mask": "16"}, "tm": "2014-12-08T08:53:33.05+05:30"}'
+ 
+-#descent with tail field having arbirary name
++#descent with tail field having arbitrary name
+ reset_rules
+ add_rule 'rule=:blocked on %device:word% %net:descent:./subset.rulebase:remaining%at %tm:date-rfc5424%'
+ reset_rules 'subset'
+Index: liblognorm-2.0.6/tests/field_recursive.sh
+===================================================================
+--- liblognorm-2.0.6.orig/tests/field_recursive.sh
++++ liblognorm-2.0.6/tests/field_recursive.sh
+@@ -19,7 +19,7 @@ add_rule 'rule=:%word:word%'
+ execute '123 abc 456 def'
+ assert_output_json_eq '{"word": "123", "next": {"word": "abc", "next": {"word": "456", "next" : {"word": "def"}}}}'
+ 
+-#tail recursion with tail field having arbirary name
++#tail recursion with tail field having arbitrary name
+ reset_rules
+ add_rule 'rule=:%word:word% %next:recursive:foo%'
+ add_rule 'rule=:%word:word%'
+@@ -46,7 +46,7 @@ assert_output_json_eq '{"device": "gw-1"
+ execute 'blocked on gw-1 10.20.30.40/16 at 2014-12-08T08:53:33.05+05:30'
+ assert_output_json_eq '{"device": "gw-1", "net": {"subnet_addr": "10.20.30.40", "mask": "16"}, "tm": "2014-12-08T08:53:33.05+05:30"}'
+ 
+-#non tail recursion with tail field having arbirary name
++#non tail recursion with tail field having arbitrary name
+ reset_rules
+ add_rule 'rule=:blocked on %device:word% %net:recursive:remaining%at %tm:date-rfc5424%'
+ add_rule 'rule=:%ip_addr:ipv4% %remaining:rest%'
+Index: liblognorm-2.0.6/rulebases/syntax.txt
+===================================================================
+--- liblognorm-2.0.6.orig/rulebases/syntax.txt
++++ liblognorm-2.0.6/rulebases/syntax.txt
+@@ -25,7 +25,7 @@ should match exactly. Field selector has
+ Percent sign is used to enclose field selector. If you need to match literal
+ '%', it can be written as '%%' or '\x25'.
+ 
+-Behaviour of field selector depends on its type, which is decribed below.
++Behaviour of field selector depends on its type, which is described below.
+ 
+ If field name is set to '-', this field is matched but not saved.
+ 
+Index: liblognorm-2.0.6/src/parser.c
+===================================================================
+--- liblognorm-2.0.6.orig/src/parser.c
++++ liblognorm-2.0.6/src/parser.c
+@@ -988,7 +988,7 @@ struct data_HexNumber {
+ /**
+  * Parse a hex Number.
+  * A hex number begins with 0x and contains only hex digits until the terminating
+- * whitespace. Note that if a non-hex character is deteced inside the number string,
++ * whitespace. Note that if a non-hex character is detected inside the number string,
+  * this is NOT considered to be a number.
+  */
+ PARSER_Parse(HexNumber)
+@@ -1148,8 +1148,8 @@ done:
+  * Parse whitespace.
+  * This parses all whitespace until the first non-whitespace character
+  * is found. This is primarily a tool to skip to the next "word" if
+- * the exact number of whitspace characters (and type of whitespace)
+- * is not known. The current parsing position MUST be on a whitspace,
++ * the exact number of whitespace characters (and type of whitespace)
++ * is not known. The current parsing position MUST be on a whitespace,
+  * else the parser does not match.
+  * This parser is also a forward-compatibility tool for the upcoming
+  * slsa (simple log structure analyser) tool.
+@@ -2661,7 +2661,7 @@ done:
+  * of end of name.
+  * Note: ArcSight violates the CEF spec ifself: they generate
+  * leading underscores in their extension names, which are
+- * definetly not alphanumeric. We still accept them...
++ * definitely not alphanumeric. We still accept them...
+  * They also seem to use dots.
+  */
+ static int
+@@ -2822,7 +2822,7 @@ PARSER_Parse(CEF)
+ 	char *name = NULL;
+ 	char *severity = NULL;
+ 
+-	/* minumum header: "CEF:0|x|x|x|x|x|x|" -->  17 chars */
++	/* minimum header: "CEF:0|x|x|x|x|x|x|" -->  17 chars */
+ 	if(npb->strLen < i + 17 ||
+ 	   npb->str[i]   != 'C' ||
+ 	   npb->str[i+1] != 'E' ||
+@@ -2847,7 +2847,7 @@ PARSER_Parse(CEF)
+ 	 * This time, we do NOT pre-process the extension, but rather
+ 	 * persist them directly to JSON. This is contrary to other
+ 	 * parsers, but as the CEF header is pretty unique, this time
+-	 * it is exteremely unlike we will get a no-match during
++	 * it is extremely unlikely we will get a no-match during
+ 	 * extension processing. Even if so, nothing bad happens, as
+ 	 * the extracted data is discarded. But the regular case saves
+ 	 * us processing time and complexity. The only time when we
+Index: liblognorm-2.0.6/src/pdag.h
+===================================================================
+--- liblognorm-2.0.6.orig/src/pdag.h
++++ liblognorm-2.0.6/src/pdag.h
+@@ -32,7 +32,7 @@ struct ln_type_pdag;
+  * parser IDs.
+  *
+  * These identfy a parser. VERY IMPORTANT: they must start at zero
+- * and continously increment. They must exactly match the index
++ * and continuously increment. They must exactly match the index
+  * of the respective parser inside the parser lookup table.
+  */
+ #define PRS_LITERAL			0
+@@ -107,7 +107,7 @@ struct ln_parser_info {
+ struct ln_pdag {
+ 	ln_ctx ctx;			/**< our context */ // TODO: why do we need it?
+ 	ln_parser_t *parsers;		/* array of parsers to try */
+-	prsid_t nparsers;		/**< current table size (prsid_t slighly abused) */
++	prsid_t nparsers;		/**< current table size (prsid_t slightly abused) */
+ 	struct {
+ 		unsigned isTerminal:1;	/**< designates this node a terminal sequence */
+ 		unsigned visited:1;	/**< work var for recursive procedures */
+@@ -142,7 +142,7 @@ extern int advstats_max_backtracked;
+ extern int advstats_backtracks[ADVSTATS_MAX_ENTITIES];
+ #endif
+ 
+-/** the "normalization paramater block" (npb)
++/** the "normalization parameter block" (npb)
+  * This structure is passed to all normalization routines including
+  * parsers. It contains data that commonly needs to be passed,
+  * like the to be parsed string and its length, as well as read/write
+@@ -195,7 +195,7 @@ void ln_pdagDelete(struct ln_pdag *DAG);
+ 
+ /**
+  * Add parser to dag node.
+- * Works on unoptimzed dag.
++ * Works on unoptimized dag.
+  *
+  * @param[in] pdag pointer to pdag to modify
+  * @param[in] parser parser definition
+Index: liblognorm-2.0.6/src/v1_liblognorm.h
+===================================================================
+--- liblognorm-2.0.6.orig/src/v1_liblognorm.h
++++ liblognorm-2.0.6/src/v1_liblognorm.h
+@@ -66,12 +66,12 @@
+  * Inherit control attributes from a library context.
+  *
+  * This does not copy the parse-tree, but does copy
+- * behaviour-controling attributes such as enableRegex.
++ * behaviour-controlling attributes such as enableRegex.
+  *
+  * Just as with ln_initCtx, ln_exitCtx() must be called on a library
+  * context that is no longer needed.
+  *
+- * @return new library context or NULL if an error occured
++ * @return new library context or NULL if an error occurred
+  */
+ ln_ctx ln_v1_inherittedCtx(ln_ctx parent);
+ 
+@@ -127,7 +127,7 @@ int ln_v1_loadSamples(ln_ctx ctx, const
+  * @param[in] ctx The library context to use.
+  * @param[in] str The message string (see note above).
+  * @param[in] strLen The length of the message in bytes.
+- * @param[out] json_p A new event record or NULL if an error occured. <b>Must be
++ * @param[out] json_p A new event record or NULL if an error occurred. <b>Must be
+  *                   destructed if no longer needed.</b>
+  *
+  * @return Returns zero on success, something else otherwise.
+Index: liblognorm-2.0.6/tests/repeat_mismatch_in_while.sh
+===================================================================
+--- liblognorm-2.0.6.orig/tests/repeat_mismatch_in_while.sh
++++ liblognorm-2.0.6/tests/repeat_mismatch_in_while.sh
+@@ -21,7 +21,7 @@ assert_output_json_eq '{ "originalmsg":
+ # accept this as valid. This is needed for some use cases. See github
+ # issue mentioned above for more details.
+ # Note: there is something odd with the testbench driver: I cannot use two
+-# consequtiuve spaces 
++# consecutive spaces
+ reset_rules
+ add_rule 'version=2'
+ add_rule 'prefix=%timestamp:date-rfc3164% %hostname:word%'
+Index: liblognorm-2.0.6/tests/runaway_rule_comment.sh
+===================================================================
+--- liblognorm-2.0.6.orig/tests/runaway_rule_comment.sh
++++ liblognorm-2.0.6/tests/runaway_rule_comment.sh
+@@ -1,7 +1,7 @@
+ #!/bin/bash
+ # added 2015-09-16 by Rainer Gerhards
+ # This file is part of the liblognorm project, released under ASL 2.0
+-# Note that this test produces an error message, as it encouters the
++# Note that this test produces an error message, as it encounters the
+ # runaway rule. This is OK and actually must happen. The prime point
+ # of the test is that it correctly loads the second rule, which
+ # would otherwise be consumed by the runaway rule.
+Index: liblognorm-2.0.6/tests/runaway_rule_comment_v1.sh
+===================================================================
+--- liblognorm-2.0.6.orig/tests/runaway_rule_comment_v1.sh
++++ liblognorm-2.0.6/tests/runaway_rule_comment_v1.sh
+@@ -1,7 +1,7 @@
+ #!/bin/bash
+ # added 2015-05-05 by Rainer Gerhards
+ # This file is part of the liblognorm project, released under ASL 2.0
+-# Note that this test produces an error message, as it encouters the
++# Note that this test produces an error message, as it encounters the
+ # runaway rule. This is OK and actually must happen. The prime point
+ # of the test is that it correctly loads the second rule, which
+ # would otherwise be consumed by the runaway rule.
+Index: liblognorm-2.0.6/tests/runaway_rule.sh
+===================================================================
+--- liblognorm-2.0.6.orig/tests/runaway_rule.sh
++++ liblognorm-2.0.6/tests/runaway_rule.sh
+@@ -1,7 +1,7 @@
+ #!/bin/bash
+ # added 2015-05-05 by Rainer Gerhards
+ # This file is part of the liblognorm project, released under ASL 2.0
+-# Note that this test produces an error message, as it encouters the
++# Note that this test produces an error message, as it encounters the
+ # runaway rule. This is OK and actually must happen. The prime point
+ # of the test is that it correctly loads the second rule, which
+ # would otherwise be consumed by the runaway rule.
+Index: liblognorm-2.0.6/tests/runaway_rule_v1.sh
+===================================================================
+--- liblognorm-2.0.6.orig/tests/runaway_rule_v1.sh
++++ liblognorm-2.0.6/tests/runaway_rule_v1.sh
+@@ -1,7 +1,7 @@
+ #!/bin/bash
+ # added 2015-05-05 by Rainer Gerhards
+ # This file is part of the liblognorm project, released under ASL 2.0
+-# Note that this test produces an error message, as it encouters the
++# Note that this test produces an error message, as it encounters the
+ # runaway rule. This is OK and actually must happen. The prime point
+ # of the test is that it correctly loads the second rule, which
+ # would otherwise be consumed by the runaway rule.
+Index: liblognorm-2.0.6/doc/lognormalizer.rst
+===================================================================
+--- liblognorm-2.0.6.orig/doc/lognormalizer.rst
++++ liblognorm-2.0.6/doc/lognormalizer.rst
+@@ -121,7 +121,7 @@ Special options. The following ones can
+    * **addRule** Add a mockup of the rule that was processed. Note that
+      it is *not* an exact copy of the rule, but a rule that correctly
+      describes the parsed message. Most importantly, prefixes are 
+-     appended and custom data types are expanded (and no longer visiable
++     appended and custom data types are expanded (and no longer visible
+      as such). This option is primarily meant for postprocessing, e.g.
+      as input to an anonymizer.
+ 
+@@ -233,7 +233,7 @@ systems it is yum command::
+     $ sudo yum install graphviz
+ 
+ The next step would be creating the control file for graphviz. Therefore we 
+-use the normalizer command with the options -d "prefered filename for the 
++use the normalizer command with the options -d "preferred filename for the
+ control file" and -r "rulebase"::
+ 
+     $ lognormalize -d control.dot -r messages.rb
+Index: liblognorm-2.0.6/README
+===================================================================
+--- liblognorm-2.0.6.orig/README
++++ liblognorm-2.0.6/README
+@@ -3,7 +3,7 @@ Liblognorm is a fast-samples based norma
+ More information on liblognorm can be found at
+     http://www.liblognorm.com
+ 
+-Liblognorm evolves since several years and was intially meant to be used primarily with
++Liblognorm evolves since several years and was initially meant to be used primarily with
+ the Mitre CEE effort. Consequently, the initial version of liblognorm (0.x)
+ uses the libee CEE support library in its API.
+ 
+Index: liblognorm-2.0.6/src/lognorm.c
+===================================================================
+--- liblognorm-2.0.6.orig/src/lognorm.c
++++ liblognorm-2.0.6/src/lognorm.c
+@@ -67,7 +67,7 @@ ln_dbgprintf(ln_ctx ctx, const char *fmt
+ 	lenBuf = vsnprintf(buf, sizeof(buf), fmt, ap);
+ 	va_end(ap);
+ 	if(lenBuf >= sizeof(buf)) {
+-		/* prevent buffer overruns and garbagge display */
++		/* prevent buffer overruns and garbage display */
+ 		buf[sizeof(buf) - 5] = '.';
+ 		buf[sizeof(buf) - 4] = '.';
+ 		buf[sizeof(buf) - 3] = '.';
+@@ -105,7 +105,7 @@ ln_errprintf(const ln_ctx ctx, const int
+ 	lenBuf = vsnprintf(buf, sizeof(buf), fmt, ap);
+ 	va_end(ap);
+ 	if(lenBuf >= sizeof(buf)) {
+-		/* prevent buffer overrruns and garbagge display */
++		/* prevent buffer overruns and garbage display */
+ 		buf[sizeof(buf) - 5] = '.';
+ 		buf[sizeof(buf) - 4] = '.';
+ 		buf[sizeof(buf) - 3] = '.';
+Index: liblognorm-2.0.6/src/v1_ptree.c
+===================================================================
+--- liblognorm-2.0.6.orig/src/v1_ptree.c
++++ liblognorm-2.0.6/src/v1_ptree.c
+@@ -185,7 +185,7 @@ ln_addPTree(struct ln_ptree *tree, es_st
+ 
+ LN_DBGPRINTF(tree->ctx, "addPTree: offs %zu", offs);
+ 	parentptr = &(tree->subtree[es_getBufAddr(str)[offs]]);
+-	/* First check if tree node is totaly empty. If so, we can simply add
++	/* First check if tree node is totally empty. If so, we can simply add
+ 	 * the prefix to this node. This case is important, because it happens
+ 	 * every time with a new field.
+ 	 */
+@@ -807,7 +807,7 @@ LN_DBGPRINTF(tree->ctx, "%zu got return
+ 		goto done;
+ 
+ 	/* and finally give "rest" a try if it was present. Note that we MUST do this after
+-	 * literal evaluation, otherwise "rest" can never be overriden by other rules.
++	 * literal evaluation, otherwise "rest" can never be overridden by other rules.
+ 	 */
+ 	if(restMotifNode != NULL) {
+ 		LN_DBGPRINTF(tree->ctx, "rule has rest motif, forcing match via it");
+Index: liblognorm-2.0.6/src/v1_samp.h
+===================================================================
+--- liblognorm-2.0.6.orig/src/v1_samp.h
++++ liblognorm-2.0.6/src/v1_samp.h
+@@ -52,7 +52,7 @@ struct ln_v1_samp {
+  * @param[ctx] ctx current library context
+  * @param[buf] cstr buffer containing the string contents of the sample
+  * @param[lenBuf] length of the sample contained within buf
+- * @return Newly create object or NULL if an error occured.
++ * @return Newly create object or NULL if an error occurred.
+  */
+ struct ln_v1_samp *
+ ln_v1_processSamp(ln_ctx ctx, const char *buf, es_size_t lenBuf);
+@@ -70,8 +70,8 @@ ln_v1_processSamp(ln_ctx ctx, const char
+  *
+  * @param[in] ctx current library context
+  * @param[in] repo repository descriptor
+- * @param[out] isEof must be set to 0 on entry and is switched to 1 if EOF occured.
+- * @return Newly create object or NULL if an error or EOF occured.
++ * @param[out] isEof must be set to 0 on entry and is switched to 1 if EOF occurred.
++ * @return Newly create object or NULL if an error or EOF occurred.
+  */
+ struct ln_v1_samp *
+ ln_v1_sampRead(ln_ctx ctx, FILE *repo, int *isEof);
+Index: liblognorm-2.0.6/tests/field_json_jsoncnf.sh
+===================================================================
+--- liblognorm-2.0.6.orig/tests/field_json_jsoncnf.sh
++++ liblognorm-2.0.6/tests/field_json_jsoncnf.sh
+@@ -18,7 +18,7 @@ add_rule 'rule=:%field:json%end'
+ 
+ execute '{"f1": "1", "f2": 2}'
+ assert_output_json_eq '{ "field": { "f1": "1", "f2": 2 } }'
+-#check if trailinge whitspace is ignored
++#check if trailing whitespace is ignored
+ execute '{"f1": "1", "f2": 2}      '
+ assert_output_json_eq '{ "field": { "f1": "1", "f2": 2 } }'
+ 
+@@ -47,7 +47,7 @@ add_rule 'rule=:%field1:json%-%field2:js
+ execute '{"f1": "1"}-{"f2": 2}'
+ assert_output_json_eq '{ "field2": { "f2": 2 }, "field1": { "f1": "1" } }'
+ 
+-# re-check previsous def still works
++# re-check previous def still works
+ execute '{"f1": "1", "f2": 2}'
+ assert_output_json_eq '{ "field": { "f1": "1", "f2": 2 } }'
+ 
+Index: liblognorm-2.0.6/tests/field_json.sh
+===================================================================
+--- liblognorm-2.0.6.orig/tests/field_json.sh
++++ liblognorm-2.0.6/tests/field_json.sh
+@@ -18,7 +18,7 @@ add_rule 'rule=:%field:json%end'
+ 
+ execute '{"f1": "1", "f2": 2}'
+ assert_output_json_eq '{ "field": { "f1": "1", "f2": 2 } }'
+-#check if trailinge whitspace is ignored
++#check if trailing whitespace is ignored
+ execute '{"f1": "1", "f2": 2}      '
+ assert_output_json_eq '{ "field": { "f1": "1", "f2": 2 } }'
+ 
+@@ -47,7 +47,7 @@ add_rule 'rule=:%field1:json%-%field2:js
+ execute '{"f1": "1"}-{"f2": 2}'
+ assert_output_json_eq '{ "field2": { "f2": 2 }, "field1": { "f1": "1" } }'
+ 
+-# re-check previsous def still works
++# re-check previous def still works
+ execute '{"f1": "1", "f2": 2}'
+ assert_output_json_eq '{ "field": { "f1": "1", "f2": 2 } }'
+ 
+Index: liblognorm-2.0.6/tests/field_json_v1.sh
+===================================================================
+--- liblognorm-2.0.6.orig/tests/field_json_v1.sh
++++ liblognorm-2.0.6/tests/field_json_v1.sh
+@@ -17,7 +17,7 @@ add_rule 'rule=:%field:json%end'
+ 
+ execute '{"f1": "1", "f2": 2}'
+ assert_output_json_eq '{ "field": { "f1": "1", "f2": 2 } }'
+-#check if trailinge whitspace is ignored
++#check if trailing whitespace is ignored
+ execute '{"f1": "1", "f2": 2}      '
+ assert_output_json_eq '{ "field": { "f1": "1", "f2": 2 } }'
+ 
+@@ -46,7 +46,7 @@ add_rule 'rule=:%field1:json%-%field2:js
+ execute '{"f1": "1"}-{"f2": 2}'
+ assert_output_json_eq '{ "field2": { "f2": 2 }, "field1": { "f1": "1" } }'
+ 
+-# re-check previsous def still works
++# re-check previous def still works
+ execute '{"f1": "1", "f2": 2}'
+ assert_output_json_eq '{ "field": { "f1": "1", "f2": 2 } }'
+ 
+Index: liblognorm-2.0.6/tests/field_tokenized_with_invalid_ruledef.sh
+===================================================================
+--- liblognorm-2.0.6.orig/tests/field_tokenized_with_invalid_ruledef.sh
++++ liblognorm-2.0.6/tests/field_tokenized_with_invalid_ruledef.sh
+@@ -23,13 +23,13 @@ assert_output_contains '"unparsed-data":
+ assert_output_contains '"originalmsg": "123 abc 456 def"'
+ 
+ reset_rules
+-add_rule 'rule=:%arr:tokenized:quux:some_non_existant_type%'
++add_rule 'rule=:%arr:tokenized:quux:some_non_existent_type%'
+ execute '123 abc 456 def'
+ assert_output_contains '"unparsed-data": "123 abc 456 def"'
+ assert_output_contains '"originalmsg": "123 abc 456 def"'
+ 
+ reset_rules
+-add_rule 'rule=:%arr:tokenized:quux:some_non_existant_type:%'
++add_rule 'rule=:%arr:tokenized:quux:some_non_existent_type:%'
+ execute '123 abc 456 def'
+ assert_output_contains '"unparsed-data": "123 abc 456 def"'
+ assert_output_contains '"originalmsg": "123 abc 456 def"'
+Index: liblognorm-2.0.6/tests/field_whitespace_jsoncnf.sh
+===================================================================
+--- liblognorm-2.0.6.orig/tests/field_whitespace_jsoncnf.sh
++++ liblognorm-2.0.6/tests/field_whitespace_jsoncnf.sh
+@@ -5,7 +5,7 @@
+ no_solaris10
+ 
+ test_def $0 "whitespace parser"
+-# the "word" parser unfortunatly treats everything except
++# the "word" parser unfortunately treats everything except
+ # a SP as being in the word. So a HT inside a word is
+ # permitted, which does not work well with what we
+ # want to test here. to solve this problem, we use op-quoted-string.
+Index: liblognorm-2.0.6/tests/field_whitespace.sh
+===================================================================
+--- liblognorm-2.0.6.orig/tests/field_whitespace.sh
++++ liblognorm-2.0.6/tests/field_whitespace.sh
+@@ -5,7 +5,7 @@
+ no_solaris10
+ 
+ test_def $0 "whitespace parser"
+-# the "word" parser unfortunatly treats everything except
++# the "word" parser unfortunately treats everything except
+ # a SP as being in the word. So a HT inside a word is
+ # permitted, which does not work well with what we
+ # want to test here. to solve this problem, we use op-quoted-string.
+Index: liblognorm-2.0.6/tests/field_whitespace_v1.sh
+===================================================================
+--- liblognorm-2.0.6.orig/tests/field_whitespace_v1.sh
++++ liblognorm-2.0.6/tests/field_whitespace_v1.sh
+@@ -5,7 +5,7 @@
+ no_solaris10
+ 
+ test_def $0 "whitespace parser"
+-# the "word" parser unfortunatly treats everything except
++# the "word" parser unfortunately treats everything except
+ # a SP as being in the word. So a HT inside a word is
+ # permitted, which does not work well with what we
+ # want to test here. to solve this problem, we use op-quoted-string.
+Index: liblognorm-2.0.6/tests/parser_prios.sh
+===================================================================
+--- liblognorm-2.0.6.orig/tests/parser_prios.sh
++++ liblognorm-2.0.6/tests/parser_prios.sh
+@@ -20,7 +20,7 @@ execute 'f0-f6:1c:5f:cc-a2'
+ assert_output_json_eq '{ "rest": "f0-f6:1c:5f:cc-a2" }'
+ 
+ 
+-# now the same with inverted priorites. We should now always have
++# now the same with inverted priorities. We should now always have
+ # rest matches.
+ reset_rules
+ add_rule 'version=2'

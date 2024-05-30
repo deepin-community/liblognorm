@@ -1,0 +1,6 @@
+Tests: build
+Depends: liblognorm-dev, build-essential, pkg-config
+
+Tests: execute
+Depends: liblognorm-utils
+Restrictions: allow-stderr

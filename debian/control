@@ -1,28 +1,29 @@
 Source: liblognorm
 Priority: optional
-Maintainer: Pierre Chifflier <pollux@debian.org>
-Build-Depends: debhelper (>= 9),
-    dh-autoreconf,
-    autotools-dev,
+Maintainer: Florian Ernst <florian@debian.org>
+Build-Depends: debhelper-compat (= 13),
     pkg-config,
     libxml2-dev,
     libestr-dev,
     libfastjson-dev,
+Build-Depends-Indep:
     python3-sphinx
-Standards-Version: 3.9.8
+Standards-Version: 4.6.1.0
 Section: libs
-Homepage: http://www.liblognorm.com/
-#Vcs-Git: git://git.debian.org/collab-maint/liblognorm.git
-#Vcs-Browser: http://git.debian.org/?p=collab-maint/liblognorm.git;a=summary
+Homepage: https://www.liblognorm.com/
+Vcs-Git: https://salsa.debian.org/debian/liblognorm.git
+Vcs-Browser: https://salsa.debian.org/debian/liblognorm
+Rules-Requires-Root: no
 
 Package: liblognorm-dev
 Section: libdevel
 Architecture: any
+Multi-Arch: same
 Depends: liblognorm5 (= ${binary:Version}),
     ${misc:Depends},
-    ${sphinxdoc:Depends},
     libfastjson-dev,
     libestr-dev
+Recommends: liblognorm-doc (= ${source:Version}),
 Description: log normalizing library - development files
  Liblognorm is an event and log normalization library that is capable of
  real-time processing. It provides the capability to normalize events to
@@ -30,8 +31,23 @@ Description: log normalizing library - development files
  .
  This package contains the development files.
 
+Package: liblognorm-doc
+Section: doc
+Architecture: all
+Multi-Arch: foreign
+Depends:
+    ${misc:Depends},
+    ${sphinxdoc:Depends},
+Breaks: liblognorm-dev (<< 2.0.6-2)
+Replaces: liblognorm-dev (<< 2.0.6-2)
+Description: log normalizing library - developer documentation
+ Liblognorm is an event and log normalization library that is capable of
+ real-time processing. It provides the capability to normalize events to
+ a set of standard formats.
+ .
+ This package contains the development documentation.
+
 Package: liblognorm5
-Section: libs
 Architecture: any
 Depends: ${shlibs:Depends}, ${misc:Depends}
 Pre-Depends: ${misc:Pre-Depends}

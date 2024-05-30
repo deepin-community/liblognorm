@@ -8,9 +8,20 @@ if [ "x$debug" == "xon" ]; then #get core-dump on crash
     ulimit -c unlimited
 fi
 
-cmd=../src/ln_test
+#cmd="../src/ln_test -v" # case to get debug info (add -vvv for more verbosity)
+cmd=../src/ln_test # regular case
 
 . ./options.sh
+
+no_solaris10() {
+    if (uname -a | grep -q "SunOS.*5.10"); then
+       printf 'platform: %s\n' "$(uname -a)"
+       printf 'This looks like solaris 10, we disable known-failing tests to\n'
+       printf 'permit OpenCSW to build packages. However, this are real failures\n'
+       printf 'and so a fix should be done as soon as time permits.\n'
+       exit 77
+fi
+}
 
 test_def() {
     test_file=$(basename $1)
@@ -57,10 +68,7 @@ execute_with_string() {
 }
 
 assert_output_contains() {
-    if [ "x$GREP" == "x" ]; then
-       GREP=grep
-    fi
-    cat test.out | $GREP -F "$1"
+    ${GREP:-grep} -F "$1" < test.out
 }
 
 assert_output_json_eq() {
@@ -92,7 +100,7 @@ add_rule_no_LF() {
 
 
 cleanup_tmp_files() {
-    rm -f test.out *.rulebase 
+    rm -f -- test.out *.rulebase
 }
 
 reset_rules
