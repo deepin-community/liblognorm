@@ -94,8 +94,8 @@ static struct ln_parser_info parser_lookup_table[] = {
 	PARSER_ENTRY_NO_DATA("cee-syslog", CEESyslog, 4),
 	PARSER_ENTRY_NO_DATA("mac48", MAC48, 16),
 	PARSER_ENTRY_NO_DATA("cef", CEF, 4),
-	PARSER_ENTRY_NO_DATA("checkpoint-lea", CheckpointLEA, 4),
 	PARSER_ENTRY_NO_DATA("v2-iptables", v2IPTables, 4),
+	PARSER_ENTRY("checkpoint-lea", CheckpointLEA, 4),
 	PARSER_ENTRY("string-to", StringTo, 32),
 	PARSER_ENTRY("char-to", CharTo, 32),
 	PARSER_ENTRY("char-sep", CharSeparated, 32),
@@ -267,7 +267,7 @@ ln_newParser(ln_ctx ctx,
 	node->prsid = prsid;
 	node->conf = strdup(textconf);
 	if(prsid == PRS_CUSTOM_TYPE) {
-		node->custType = custType;
+		node->custTypeIdx = custType - ctx->type_pdags;
 	} else {
 		if(parser_lookup_table[prsid].construct != NULL) {
 			parser_lookup_table[prsid].construct(ctx, prscnf, &node->parser_data);
@@ -1437,10 +1437,10 @@ tryParser(npb_t *const __restrict__ npb,
 	if(prs->prsid == PRS_CUSTOM_TYPE) {
 		if(*value == NULL)
 			*value = json_object_new_object();
-		LN_DBGPRINTF(dag->ctx, "calling custom parser '%s'", prs->custType->name);
-		r = ln_normalizeRec(npb, prs->custType->pdag, *offs, 1, *value, &endNode);
+		LN_DBGPRINTF(dag->ctx, "calling custom parser '%s'", dag->ctx->type_pdags[prs->custTypeIdx].name);
+		r = ln_normalizeRec(npb, dag->ctx->type_pdags[prs->custTypeIdx].pdag, *offs, 1, *value, &endNode);
 		LN_DBGPRINTF(dag->ctx, "called CUSTOM PARSER '%s', result %d, "
-			"offs %zd, *pParsed %zd", prs->custType->name, r, *offs, *pParsed);
+			"offs %zd, *pParsed %zd", dag->ctx->type_pdags[prs->custTypeIdx].name, r, *offs, *pParsed);
 		*pParsed = npb->parsedTo - *offs;
 		#ifdef	ADVANCED_STATS
 		es_addBuf(&npb->astats.exec_path, hdr, lenhdr);

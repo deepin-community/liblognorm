@@ -1,0 +1,11 @@
+Document: liblognorm-doc
+Title: Liblognorm documentation
+Author: Rainer Gerhards <rgerhards@adiscon.com>, Adiscon GmbH
+Abstract: This manual describes how to use Liblognorm.
+ Liblognorm shall help to make sense out of syslog data, or,
+ actually, any event data that is present in text form.
+Section: Programming/C
+
+Format: HTML
+Index: /usr/share/doc/liblognorm-dev/html/index.html
+Files: /usr/share/doc/liblognorm-dev/html/*.html

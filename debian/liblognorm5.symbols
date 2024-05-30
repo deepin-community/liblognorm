@@ -1,4 +1,5 @@
 liblognorm.so.5 liblognorm5 #MINVER#
+* Build-Depends-Package: liblognorm-dev
  descent_parser_data_constructor@Base 1.1.1
  interpret_parser_data_constructor@Base 1.1.1
  interpret_parser_data_destructor@Base 1.1.1
@@ -14,6 +15,7 @@ liblognorm.so.5 liblognorm5 #MINVER#
  ln_combineData_Literal@Base 2.0.0
  ln_constructCharSeparated@Base 2.0.0
  ln_constructCharTo@Base 2.0.0
+ ln_constructCheckpointLEA@Base 2.0.6
  ln_constructFloat@Base 2.0.5
  ln_constructHexNumber@Base 2.0.0
  ln_constructLiteral@Base 2.0.0
@@ -30,6 +32,7 @@ liblognorm.so.5 liblognorm5 #MINVER#
  ln_deletePTreeNode@Base 1.1.1
  ln_destructCharSeparated@Base 2.0.0
  ln_destructCharTo@Base 2.0.0
+ ln_destructCheckpointLEA@Base 2.0.6
  ln_destructFloat@Base 2.0.5
  ln_destructHexNumber@Base 2.0.0
  ln_destructLiteral@Base 2.0.0

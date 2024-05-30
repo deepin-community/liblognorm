@@ -232,7 +232,7 @@ parameters.
 
 Its structure is as follows::
 
-    %<field name>:<field type>[{<parameters>}]%
+    %<field name>:<field type>{<parameters>}%
 
 **field name** -> that name can be selected freely. It should be a description 
 of what kind of information the field is holding, e.g. SRC is the field 
@@ -568,10 +568,16 @@ Specifies how quote character escaping is handled. Possible modes:
 * **backslash** - a backslash is prepended to the quote character (e.g ``\"``)
 * **both** - both double and backslash escaping can happen and are supported
 
+Default is ``both``.
+
 Note that turning on ``backslash`` mode (or ``both``) has the side-effect that
 backslash escaping is enabled in general. This usually is what you want
 if this option is selected (e.g. otherwise you could no longer represent
 backslash).
+
+**NOTE**: this parameter also affects operation if quoting is **turned off**. That
+is somewhat counter-intuitive, but has traditionally been the case - which means
+we cannot change it.
 
 quoting.char.begin
 ~~~~~~~~~~~~~~~~~~
@@ -643,6 +649,39 @@ follows::
 		       {"class":"digit"},
 		       {"class":"alpha"}
                           ]}%
+
+matching.mode
+~~~~~~~~~~~~~
+
+This parameter permits the strict matching requirement of liblognorm, where each
+parser must be terminated by a space character. Possible values are:
+
+* **strict** - which requires that space
+* **lazy** - which does not
+
+Default is ``strict``, this parameter is available starting with version 2.0.6.
+
+In ``lazy`` mode, the parser always matches if at least one character can be matched.
+This can lead to unexpected results, so use it with care.
+
+Example: assume the following message (without quotes)::
+
+    "12:34 56"
+
+And the following parser definition::
+
+  rule=:%f:string{"matching.permitted":[ {"class":"digit"} ]}
+                   %%r:rest%
+
+This will be unresolvable, as ":" is not a digit. With this definition::
+
+  rule=:%f:string{"matching.permitted":[ {"class":"digit"} ], "matching.mode":"lazy"}
+                   %%r:rest%
+
+it becomes resolvable, and ``f`` will contain "12" and ``r`` will contain ":34 56".
+This also shows the risk associated, as the result obtained may not necessarily be
+what was intended.
+
 
 word
 ####
@@ -869,11 +908,48 @@ is underdocumented, the Checkpoint docs we could get hold of just
 describe the API and provide a field dictionary. In a nutshell, what
 we do is extract field names up to the colon and values up to the
 semicolon. No escaping rules are known to us, so we assume none
-exists (and as such no semicolon can be part of a value).
+exists (and as such no semicolon can be part of a value). This
+format needs to continue until the end of the log message.
+
+We have also seen some samples of a LEA format that has data **after**
+the format described above. So it does not end at the end of log line.
+We guess that this is LEA when used inside (syslog) messages. We have
+one sample where the format ends on a brace (`; ]`). To support this,
+the `terminator` parameter exists (see below).
 
 If someone has a definitive reference or a sample set to contribute
 to the project, please let us know and we will check if we need to
 add additional transformations.
+
+Parameters
+..........
+
+terminator
+~~~~~~~~~~
+Must be a single character. If used, LEA format is terminated when the
+character is hit instead of a field name. Note that the terminator character
+is **not** part of LEA. It it should be skipped, it must be specified as
+a literal after the parser. We have implemented it in this way as this
+provides most options for this format - about which we do not know any
+details.
+
+Example
+.......
+
+This configures a LEA parser for use with the syslog transfer format
+(if we guess right). It terminates when a brace is detected.
+
+Rule (condensed format)::
+
+    rule=:%field:checkpoint-lea{"terminator": "]"}%]
+
+Data::
+
+    tcp_flags: RST-ACK; src: 192.168.0.1; ]
+
+Result::
+
+   { "field": { "tcp_flags": "RST-ACK", "src": "192.168.0.1" } }'
 
 
 cisco-interface-spec

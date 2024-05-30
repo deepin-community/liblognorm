@@ -1,26 +1,24 @@
 #!/usr/bin/make -f
-# -*- makefile -*-
-# Sample debian/rules that uses debhelper.
-# This file was originally written by Joey Hess and Craig Small.
-# As a special exception, when this file is copied by dh-make into a
-# dh-make output file, you may use that output file without restriction.
-# This special exception was added by Craig Small in version 0.37 of dh-make.
+export DH_VERBOSE = 1
+export DEB_BUILD_MAINT_OPTIONS = hardening=+all
 
-# Uncomment this to turn on verbose mode.
-#export DH_VERBOSE=1
-
-export DEB_BUILD_HARDENING=1
+DOPACKAGES = $(shell dh_listpackages)
 
 override_dh_auto_configure:
-	dh_auto_configure -- --enable-docs --enable-compile-warnings=yes
+	dh_auto_configure -- --$(if $(filter liblognorm-doc,$(DOPACKAGES)),en,dis)able-docs --enable-compile-warnings=yes
 
-override_dh_auto_build:
-	[ -d "doc/_static" ] || mkdir "doc/_static"; \
-	[ -d "doc/_templates" ] || mkdir "doc/_templates"; \
-	dh_auto_build
+execute_before_dh_auto_build:
+	mkdir -p doc/_static
 
 override_dh_compress:
-	dh_compress -X.rst -X.js -X.html -X.txt
+	dh_compress -X.txt
+
+override_dh_auto_test-arch:
+	# must be executed consecutively lest they interfere with each other!
+	dh_auto_test --no-parallel
+# unbreak arch-indep only builds
+override_dh_auto_test-indep:
 
 %:
-	dh $@ --with=autoreconf,sphinxdoc
+	dh $@ --with=autoreconf $(DH_ADDONS)
+build binary %-indep: DH_ADDONS=--with=sphinxdoc
