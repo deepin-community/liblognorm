@@ -1,3 +1,9 @@
+liblognorm (2.0.6-4deepin1) unstable; urgency=medium
+
+  * Rebuild with LTO enabled (dpkg vendor feature optimize/lto).
+
+ -- tunaichao <tunaichao@uniontech.com>  Mon, 21 Sep 2026 15:24:30 +0800
+
 liblognorm (2.0.6-4) unstable; urgency=medium
 
   * [09198af] adding appropriate Breaks+Replaces: liblognorm-dev (<< 2.0.6-2)
